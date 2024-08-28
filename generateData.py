@@ -21,7 +21,7 @@ massOfWBoson = 80
 massOfTParticle = 172.76
 
 
-with open("data/pt.csv", "w", newline='') as ptOutFile, open("data/pty.csv", "w", newline='') as ptyOutFile:
+with open("data/v2/pt.csv", "w", newline='') as ptOutFile, open("data/v2/pty.csv", "w", newline='') as ptyOutFile:
     ptOut = csv.writer(ptOutFile)
     ptyOut = csv.writer(ptyOutFile)
 

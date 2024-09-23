@@ -3,11 +3,12 @@
 import ROOT
 import math
 import numpy as np
+import pandas as pd
 
 ROOT.gInterpreter.AddIncludePath("~/physics/delphes-master/external/")
 ROOT.gSystem.Load("~/physics/delphes-master/libDelphes.so")
 
-filesStr = ["300", "500", "700", "900", "1100"]
+filesStr = ["500"]
 folderNames = ["MDM", "Anapole", "CR", "EDM"]
 
 folderNameToNum = {
@@ -20,8 +21,8 @@ folderNameToNum = {
 massOfWBoson = 80
 massOfTParticle = 172.76
 
-zero = np.empty(shape=(0,3))
-one = np.empty(shape=(0,3))
+zero = np.empty(shape=(0,11))
+one = np.empty(shape=(0,11))
 
 for fileMassNum in filesStr:
     files = []
@@ -107,14 +108,17 @@ for fileMassNum in filesStr:
             # self.houtMomentumHeavyTParticle.Fill(heavyTParticle.Pt())
 
             twoQuarkDelta = tParticle.DeltaR(heavyTParticle)
+            heavyTParticlePhotonDelta = heavyTParticle.DeltaR(photon)
+
 
             # self.houtTwoQuarkDelta.Fill(twoQuarkDelta)
-            if (folderNameToNum[folderNames[fileNum]] == 1):
-                one = np.concatenate((one, [[heavyTParticle.Pt(), twoQuarkDelta, folderNameToNum[folderNames[fileNum]]]]))
-            else:
-                zero = np.concatenate((zero, [[heavyTParticle.Pt(), twoQuarkDelta, folderNameToNum[folderNames[fileNum]]]]))
 
             thisQuantity = math.pow((tParticle.P() + heavyTParticle.P()), 2)
+
+            if (folderNameToNum[folderNames[fileNum]] == 1):
+                one = np.concatenate((one, [[heavyTParticle.Pt(), heavyTParticle.P(), heavyTParticle.Px(), heavyTParticle.Py(), heavyTParticle.Pz(), heavyTParticle.E(), heavyTParticlePhotonDelta, twoQuarkDelta, heavyTParticle.M(), thisQuantity, folderNameToNum[folderNames[fileNum]]]]))
+            else:
+                zero = np.concatenate((zero, [[heavyTParticle.Pt(), heavyTParticle.P(), heavyTParticle.Px(), heavyTParticle.Py(), heavyTParticle.Pz(), heavyTParticle.E(), heavyTParticlePhotonDelta, twoQuarkDelta, heavyTParticle.M(), thisQuantity, folderNameToNum[folderNames[fileNum]]]]))
             
             # self.houtThisQuantity.Fill(thisQuantity)
 # ROOT.gApplication.Run()
@@ -124,5 +128,6 @@ zero = zero[0:one.shape[0], :]
 one = one[0:zero.shape[0], :]
 sum = np.concatenate((one, zero))
 np.random.shuffle(sum)
+sum = pd.DataFrame(sum, columns=["Pt", "P", "Px", "Py", "Pz", "E", "Heavy Top Photon Delta", "Heavy Top Top Quark Delta", "Mass", "math.pow((tParticle.P() + heavyTParticle.P()), 2)", "isDim6"])
 
-np.savetxt("data/v3/data.csv", sum, delimiter=",")
+sum.to_csv("data/v4/data500.csv")

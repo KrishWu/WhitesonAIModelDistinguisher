@@ -8,7 +8,7 @@ import pandas as pd
 ROOT.gInterpreter.AddIncludePath("~/physics/delphes-master/external/")
 ROOT.gSystem.Load("~/physics/delphes-master/libDelphes.so")
 
-filesStr = ["500"]
+filesStr = ["300", "500", "700", "900", "1100"]
 folderNames = ["MDM", "Anapole", "CR", "EDM"]
 
 folderNameToNum = {
@@ -130,4 +130,4 @@ sum = np.concatenate((one, zero))
 np.random.shuffle(sum)
 sum = pd.DataFrame(sum, columns=["Pt", "P", "Px", "Py", "Pz", "E", "Heavy Top Photon Delta", "Heavy Top Top Quark Delta", "Mass", "math.pow((tParticle.P() + heavyTParticle.P()), 2)", "isDim6"])
 
-sum.to_csv("data/v4/data500.csv")
+sum.to_csv("data/v5/data.csv")

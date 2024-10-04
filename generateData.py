@@ -21,8 +21,8 @@ folderNameToNum = {
 massOfWBoson = 80
 massOfTParticle = 172.76
 
-zero = np.empty(shape=(0,11))
-one = np.empty(shape=(0,11))
+zero = np.empty(shape=(0,26))
+one = np.empty(shape=(0,26))
 
 for fileMassNum in filesStr:
     files = []
@@ -109,6 +109,7 @@ for fileMassNum in filesStr:
 
             twoQuarkDelta = tParticle.DeltaR(heavyTParticle)
             heavyTParticlePhotonDelta = heavyTParticle.DeltaR(photon)
+            tParticlePhotonDelta = tParticle.DeltaR(photon)
 
 
             # self.houtTwoQuarkDelta.Fill(twoQuarkDelta)
@@ -116,9 +117,9 @@ for fileMassNum in filesStr:
             thisQuantity = math.pow((tParticle.P() + heavyTParticle.P()), 2)
 
             if (folderNameToNum[folderNames[fileNum]] == 1):
-                one = np.concatenate((one, [[heavyTParticle.Pt(), heavyTParticle.P(), heavyTParticle.Px(), heavyTParticle.Py(), heavyTParticle.Pz(), heavyTParticle.E(), heavyTParticlePhotonDelta, twoQuarkDelta, heavyTParticle.M(), thisQuantity, folderNameToNum[folderNames[fileNum]]]]))
+                one = np.concatenate((one, [[heavyTParticle.Pt(), heavyTParticle.P(), heavyTParticle.Px(), heavyTParticle.Py(), heavyTParticle.Pz(), heavyTParticle.E(), heavyTParticle.M(), tParticle.Pt(), tParticle.P(), tParticle.Px(), tParticle.Py(), tParticle.Pz(), tParticle.E(), tParticle.M(), photon.Pt(), photon.P(), photon.Px(), photon.Py(), photon.Pz(), photon.E(), photon.M(), heavyTParticlePhotonDelta, twoQuarkDelta, tParticlePhotonDelta, thisQuantity, folderNameToNum[folderNames[fileNum]]]]))
             else:
-                zero = np.concatenate((zero, [[heavyTParticle.Pt(), heavyTParticle.P(), heavyTParticle.Px(), heavyTParticle.Py(), heavyTParticle.Pz(), heavyTParticle.E(), heavyTParticlePhotonDelta, twoQuarkDelta, heavyTParticle.M(), thisQuantity, folderNameToNum[folderNames[fileNum]]]]))
+                zero = np.concatenate((zero, [[heavyTParticle.Pt(), heavyTParticle.P(), heavyTParticle.Px(), heavyTParticle.Py(), heavyTParticle.Pz(), heavyTParticle.E(), heavyTParticle.M(), tParticle.Pt(), tParticle.P(), tParticle.Px(), tParticle.Py(), tParticle.Pz(), tParticle.E(), tParticle.M(), photon.Pt(), photon.P(), photon.Px(), photon.Py(), photon.Pz(), photon.E(), photon.M(), heavyTParticlePhotonDelta, twoQuarkDelta, tParticlePhotonDelta, thisQuantity, folderNameToNum[folderNames[fileNum]]]]))
             
             # self.houtThisQuantity.Fill(thisQuantity)
 # ROOT.gApplication.Run()
@@ -128,6 +129,11 @@ zero = zero[0:one.shape[0], :]
 one = one[0:zero.shape[0], :]
 sum = np.concatenate((one, zero))
 np.random.shuffle(sum)
-sum = pd.DataFrame(sum, columns=["Pt", "P", "Px", "Py", "Pz", "E", "Heavy Top Photon Delta", "Heavy Top Top Quark Delta", "Mass", "math.pow((tParticle.P() + heavyTParticle.P()), 2)", "isDim6"])
+sum = pd.DataFrame(sum, columns=[
+    "HeavyTParticle_Pt", "HeavyTParticle_P", "HeavyTParticle_Px", "HeavyTParticle_Py", "HeavyTParticle_Pz", "HeavyTParticle_E", "HeavyTParticle_M",
+    "TParticle_Pt", "TParticle_P", "TParticle_Px", "TParticle_Py", "TParticle_Pz", "TParticle_E", "TParticle_M",
+    "Photon_Pt", "Photon_P", "Photon_Px", "Photon_Py", "Photon_Pz", "Photon_E", "Photon_M",
+    "HeavyTParticlePhotonDelta", "TwoQuarkDelta", "TParticlePhotonDelta", "math.pow((tParticle.P() + heavyTParticle.P()), 2)", "isDim6"
+])
 
 sum.to_csv("data/v5/data.csv")

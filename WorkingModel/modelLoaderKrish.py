@@ -17,22 +17,35 @@ model = torch.nn.Sequential(
 )
 model.load_state_dict(torch.load("net.pth"))
 
-# data = pd.read_csv("data.csv")
-# data = data.to_numpy()
-# indices = np.array([3, 4, 5, 6, 17, 18, 19, 20])
-# dataLabels = data[:,26:]
-# data = data[:,indices]
 
-# Temp 1 Line Data
+# DATA FROM THE CSV FILE
+dataFromFile = pd.read_csv("data/v5/data.csv")
+dataFromFile = dataFromFile.to_numpy()
+indicesFromFile = np.array([3, 4, 5, 6, 17, 18, 19, 20])
+dataLabelsFromFile = dataFromFile[:,26:]
+dataFromFile = dataFromFile[:,indicesFromFile]
+
+scaler = joblib.load('scaler.pkl')
+data_scaledFromFile = scaler.transform(dataFromFile)
+inputsFromFile = torch.tensor(data_scaledFromFile, dtype=torch.float32)  # Use float32 for the model input
+
+print("dataFromFile", dataFromFile[0])
+print("scaledDataFromFile", data_scaledFromFile[0])
+
+
+# 1 LINE OF DATA
 data = np.array([[417.97728222, -837.35125351,  270.80903227, 2301.16177279,  385.30475257, 492.94182467,  515.25724637,  810.5192316]])
 dataLabels = np.array([[1]])
 
-scaler = joblib.load('scaler.pkl')
+# scaler = joblib.load('scaler.pkl')
 data_scaled = scaler.transform(data)
 inputs = torch.tensor(data_scaled, dtype=torch.float32)  # Use float32 for the model input
+print("data", data)
+print("scaledData", data_scaled)
 
 model.eval()  # Set model to evaluation mode (important for layers like Dropout)
-    
+
+
 with torch.no_grad():  # Disable gradient calculations
     outputs = model(inputs)
 

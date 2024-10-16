@@ -3,6 +3,7 @@
         "Delphes",
         "dtype",
         "genfromtxt",
-        "hout"
+        "hout",
+        "joblib"
     ]
 }

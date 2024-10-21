@@ -28,7 +28,7 @@ for fileMassNum in filesStr:
     files = []
 
     for i in range(len(folderNames)):
-        files.append(ROOT.TFile("./" + folderNames[i] + "/tag_1_delphes_events " + fileMassNum + ".root", "read"))
+        files.append(ROOT.TFile("./rootFiles" + folderNames[i] + "/tag_1_delphes_events " + fileMassNum + ".root", "read"))
 
     for fileNum in range(len(files)):
         tree = files[fileNum].Get("Delphes")

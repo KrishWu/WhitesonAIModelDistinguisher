@@ -16,9 +16,9 @@ def load_model():
         torch.nn.Linear(20, 1),
         torch.nn.Sigmoid()
     )
-    model.load_state_dict(torch.load("net.pth"))
+    model.load_state_dict(torch.load("export/500/net500.pth"))
 
-    scaler = joblib.load('scaler.pkl')
+    scaler = joblib.load('export/500/scaler500.pkl')
 
     return model,scaler
 
